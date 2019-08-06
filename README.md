@@ -261,7 +261,7 @@ if __name__ == "__main__":
     rospy.spin()
 ```
 
-How can you use the __Callback Based SimpleActionClient__ in order to increase the speed of the exploration? 
+How can you use the __Callback Based SimpleActionClient__ in order to increase the speed of the exploration? You can implement the assignment with __Callback Based SimpleActionClient__ in __less than 100 lines of Python code__.
 
 ### The presentation
 
