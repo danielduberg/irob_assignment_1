@@ -1,0 +1,9 @@
+# Goal definition
+---
+# Result definition
+float64 gain
+nav_msgs/Path path
+---
+# Feedback definition
+float64 gain
+nav_msgs/Path path

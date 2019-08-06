@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="x_pos" default="0.0"/>
+  <arg name="y_pos" default="0.0"/>
+  <arg name="z_pos" default="0.0"/>
+	<arg name="gui" default="false"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find simulation)/worlds/aep_office.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model turtlebot3 -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
+
+	<!-- SLAM -->
+	<arg name="slam_methods" default="hector" doc="slam type [gmapping, cartographer, hector, karto, frontier_exploration]"/>
+  <arg name="configuration_basename" default="turtlebot3_lds_2d.lua"/>
+  <arg name="open_rviz" default="true"/>
+
+  <!-- TurtleBot3 -->
+  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch">
+    <arg name="model" value="$(arg model)" />
+  </include>
+
+  <!-- SLAM: Gmapping, Cartographer, Hector, Karto, Frontier_exploration, RTAB-Map -->
+  <include file="$(find irob_ros_tutorial)/launch/slam.launch">
+  <!-- <include file="$(find turtlebot3_slam)/launch/turtlebot3_$(arg slam_methods).launch"> -->
+    <arg name="model" value="$(arg model)"/>
+    <arg name="configuration_basename" value="$(arg configuration_basename)"/>
+  </include>
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find irob_ros_tutorial)/rviz/view.rviz -s $(find irob_ros_tutorial)/rviz/splash_screen.png"/>
+  </group>
+
+  <!-- Cost map -->
+  <!-- Publishes the voxel grid to rviz for display -->
+  <node pkg="costmap_2d" type="costmap_2d_markers" name="voxel_visualizer">
+    <remap from="voxel_grid" to="costmap/voxel_grid"/>
+  </node>
+
+  <!-- Run the costmap node -->
+  <node name="costmap_node" pkg="costmap_2d" type="costmap_2d_node" >
+    <rosparam file="$(find irob_ros_tutorial)/launch/costmap.yaml" command="load" ns="costmap" />
+    <remap from="base_scan" to="scan"/>
+  </node>
+</launch>
