@@ -311,7 +311,7 @@ What you should see if you have done everything correct:
 
 The important part of this assignment is not that you write superb code. What we want you to focus on is to understand ROS.
 
-You should be able to explain the different ROS concepts, what nodes, topics, services, messages, actionlib, ect. You should be able to explain all lines in your code: why do you need a `rospy.init_node(...)`? What does `pub = rospy.Publisher(...)` and `pub.publish(...)` do? What is the `queue_size` parameter used for when you are calling `rospy.Publisher(...)`?
+You should be able to explain the different ROS concepts, nodes, topics, services, messages, actionlib, ect. You should be able to explain all lines in your code: why do you need a `rospy.init_node(...)`? What does `pub = rospy.Publisher(...)` and `pub.publish(...)` do? What is the `queue_size` parameter used for when you are calling `rospy.Publisher(...)`?
 
 #### (Will be) Frequently Asked Questions
 
