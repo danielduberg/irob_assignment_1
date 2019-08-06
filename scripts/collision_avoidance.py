@@ -2,7 +2,7 @@
 import rospy
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Pose, PoseStamped, Point, PointStamped, Quaternion
-from irob_ros_tutorial.srv import GetSetpoint, GetSetpointRequest, GetSetpointResponse
+from irob_assignment_1.srv import GetSetpoint, GetSetpointRequest, GetSetpointResponse
 from orm import ORM
 from polar_histogram import PolarHistogram
 import tf2_ros
@@ -63,7 +63,7 @@ def get_next_setpoint(path):
 
     last_point = PointStamped()
 
-    print(len(path.poses))
+    # print(len(path.poses))
 
     if 1 == len(path.poses):
         point.header = path.header

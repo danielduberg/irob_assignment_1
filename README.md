@@ -193,6 +193,42 @@ You should do at least these actionlib tutorials:
 
 ### Mini-project
 
+#### Installation
+
+```bash
+cd ~/catkin_ws/
+wstool init src
+cd src
+wstool set irob_assignment_1 --git https://github.com/danielduberg/irob_assignment_1.git -v master
+wstool set hector_slam --git https://github.com/tu-darmstadt-ros-pkg/hector_slam.git -v melodic-devel
+wstool update
+catkin_make -DCMAKE_BUILD_TYPE=RelWithDebInfo
+source ~/.bashrc
+```
+
+#### Description
+
+As you all know: Exploration is the ___coolest___ area of robotics. For your first ROS project you should therefore help a robot that is almost ready to perform exploration.
+
+If you launch the launch file `start.launch` inside `irob_assignment_1/launch`:
+
+```bash
+roslaunch irob_assignment_1 start.launch
+```
+
+You will see this:
+
+![RViz view](images/rviz.png "RViz view")
+
+Take a look at the TF tree by running the command `rqt`, to start RQT, then in the top bar select `Pluings->Visualization->TF Tree`:
+
+![TF tree](images/frames.png "TF tree")
+
+Take a look at the node graph in RQT `Plugins->Introspection->Node Graph`:
+
+![Node graph](images/rosgraph.png "Node graph")
+
+
 Pseudocode of the assignment:
 
 ```python
@@ -214,7 +250,7 @@ Minimal example of __Callback Based SimpleActionClient__:
 #!/usr/bin/env python2
 import rospy
 import actionlib
-import irob_ros_tutorial.msg
+import irob_assignment_1.msg
 
 goal_client = None
 
@@ -244,7 +280,7 @@ def goal_result(state, result):
 def get_path():
     global goal_client
     goal_client.wait_for_server()
-    goal = irob_ros_tutorial.msg.GetNextGoalGoal()
+    goal = irob_assignment_1.msg.GetNextGoalGoal()
     goal_client.send_goal(goal, active_cb=goal_active,
                           feedback_cb=goal_feedback, done_cb=goal_result)
 
@@ -254,7 +290,7 @@ if __name__ == "__main__":
 
     # Action client
     goal_client = actionlib.SimpleActionClient(
-        "get_next_goal", irob_ros_tutorial.msg.GetNextGoalAction)
+        "get_next_goal", irob_assignment_1.msg.GetNextGoalAction)
 
     get_path()
 
@@ -263,8 +299,80 @@ if __name__ == "__main__":
 
 How can you use the __Callback Based SimpleActionClient__ in order to increase the speed of the exploration? You can implement the assignment with __Callback Based SimpleActionClient__ in __less than 100 lines of Python code__.
 
-### The presentation
+#### The presentation
 
 The important part of this assignment is not that you write superb code. What we want you to focus on is to understand ROS.
 
 You should be able to explain the different ROS concepts, what nodes, topics, services, messages, actionlib, ect. You should be able to explain all lines in your code: why do you need a `rospy.init_node(...)`? What does `pub = rospy.Publisher(...)` and `pub.publish(...)` do? What is the `queue_size` parameter used for when you are calling `rospy.Publisher(...)`?
+
+#### (Will be) Frequently Asked Questions
+
+##### Why is exploration the coolest area of robotics?
+
+Say one area in robotics that is cooler? There you go.
+
+##### Which TF functions should I use to complete the mini-project?
+
+I did it with `tf_buffer.lookup_transform(...)` and `tf2_geometry_msgs.do_transform_point(...)`.
+
+##### My robot moves weird in the mini-project, why?
+
+Did you set a maximum linear and angular velocity? 0.5 and 1.0, respectively, should work.
+
+##### How do I get the angular velocity?
+
+Math. Use: `math.atan2(y, x)`.
+
+##### The TF says something about extrapolating into the past, why?
+
+Probably because you did not initilize the TF buffer such that it has the transforms, like this:
+
+```python
+# Imports
+
+# Global variables
+
+tf_buffer = None
+listener = None
+
+# Your other functions
+
+if __name__ == "__main__":
+    rospy.init_node("controller")
+
+    # Other stuff you want to init
+
+    # Create TF buffer
+    tf_buffer = tf2_ros.Buffer()
+    listener = tf2_ros.TransformListener(tf_buffer)
+
+    # Function calls and such
+
+    rospy.spin()
+
+```
+
+You should do this in the beginning (right after `rospy.init_node(...)`) such that it has time to buffer the transforms.
+
+##### The TF says something about extrapolating into the future, why?
+
+Probably because you are trying to get a transform that is not yet available. TF2 cannot extrapolate, only interpolate.
+
+You can use these inside `tf_buffer.lookup_transform(...)`:
+`rospy.Time(0)` to get the most recent transform and `rospy.Duration(1)` to wait for 1 second if that is needed.
+
+##### Why is the exploration so slow?
+
+You probably did not use the Callback Based SimpleActionClient. Implement it using Callback Based SimpleActionClient instead. In the feedback callback you can see if the current `gain` is over, for example, 3 (or some other value that you find is good) and then cancel the goal if that is the case.
+
+##### I am trying to cancel the goal but it is not working :(
+
+Try to cancel all the goals using `goal_client.cancel_all_goals()`.
+
+##### I implemented the Callback Based SimpleActionClient, but it is not working :(
+
+Did you actually cancel the request after you got a feedback with high enough gain? When you cancel the request you will get a result `actionlib.TerminalState.PREEMPTED`, so be sure that in the result callback that you only do something if the state is `actionlib.TerminalState.SUCCEEDED`.
+
+##### It is too much to do and it is too difficult :(
+
+It really is not that much to do. The tutorials are just reading and copy-paste. I solved the mini-project with Callback Based SimpleActionClient using 3 if-statements and 1 while-loop. The rest was basically just copy-paste from the tutorials. You find it hard because you are new to ROS, in 1 year you will look back and laugh at yourself.

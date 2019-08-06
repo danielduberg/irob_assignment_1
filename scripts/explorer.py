@@ -3,7 +3,7 @@ import rospy
 import actionlib
 from nav_msgs.msg import OccupancyGrid, Path
 from visualization_msgs.msg import Marker, MarkerArray
-import irob_ros_tutorial.msg
+import irob_assignment_1.msg
 from sensor import Sensor
 from rrt import RRT
 import numpy as np
@@ -32,7 +32,7 @@ best_branch_pub = None
 
 def get_next_goal(goal):
     global action_server, grid_map, sensor
-    feedback = irob_ros_tutorial.msg.GetNextGoalFeedback()
+    feedback = irob_assignment_1.msg.GetNextGoalFeedback()
 
     feedback.gain = 0
     feedback.path = Path()
@@ -99,7 +99,7 @@ def get_next_goal(goal):
             publish_tree(tree)
 
     if success:
-        result = irob_ros_tutorial.msg.GetNextGoalResult()
+        result = irob_assignment_1.msg.GetNextGoalResult()
         result.gain = feedback.gain
         result.path = feedback.path
         result.path.header.frame_id = grid_map.header.frame_id
@@ -189,7 +189,7 @@ if __name__ == "__main__":
 
     # Action servers
     action_server = actionlib.SimpleActionServer(
-        "get_next_goal", irob_ros_tutorial.msg.GetNextGoalAction, execute_cb=get_next_goal, auto_start=False)
+        "get_next_goal", irob_assignment_1.msg.GetNextGoalAction, execute_cb=get_next_goal, auto_start=False)
     action_server.start()
 
     rospy.spin()

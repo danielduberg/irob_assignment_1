@@ -1,0 +1,42 @@
+global_frame: map
+robot_base_frame: base_link
+update_frequency: 5.0
+publish_frequency: 1.0
+always_send_full_costmap: true
+
+#set if you want the voxel map published
+publish_voxel_map: false
+
+#set to true if you want to initialize the costmap from a static map
+static_map: true
+
+#begin - COMMENT these lines if you set static_map to true
+#rolling_window: false
+#width: 100
+#height: 100
+#resolution: 0.2
+#origin_x: -50
+#origin_y: -50
+#end - COMMENT these lines if you set static_map to true
+
+
+#START OBSTACLE STUFF
+map_type: obstacle
+track_unknown_space: true
+footprint_clearing_enabled: true
+combination_method: 1
+#END OBSTACLE STUFF
+
+transform_tolerance: 0.3
+obstacle_range: 9.5
+max_obstacle_height: 2.0
+raytrace_range: 9
+#footprint: [[-0.105, -0.105], [-0.105, 0.105], [0.105, 0.105], [0.46, 0.0], [0.105, -0.105]]
+robot_radius: 0.5
+footprint_padding: 0.01
+inflation_radius: 0.5
+cost_scaling_factor: 10.0
+lethal_cost_threshold: 100
+observation_sources: base_scan
+base_scan: {data_type: LaserScan, expected_update_rate: 20,
+  observation_persistence: 0.0, marking: true, clearing: true, max_obstacle_height: 1, min_obstacle_height: -0.1, inf_is_valid: true}

@@ -4,7 +4,6 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /Global Options1
         - /TF1/Frames1
       Splitter Ratio: 0.594406008720398
     Tree Height: 610
@@ -203,7 +202,7 @@ Visualization Manager:
       Marker Topic: /tree
       Name: Tree
       Namespaces:
-        edges: true
+        {}
       Queue Size: 100
       Value: true
   Enabled: true
