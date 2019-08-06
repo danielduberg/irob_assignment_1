@@ -315,10 +315,6 @@ You should be able to explain the different ROS concepts, nodes, topics, service
 
 #### (Will be) Frequently Asked Questions
 
-##### Why is exploration the coolest area of robotics?
-
-Say one area in robotics that is cooler? There you go.
-
 ##### Which TF functions should I use to complete the mini-project?
 
 I did it with `tf_buffer.lookup_transform(...)` and `tf2_geometry_msgs.do_transform_point(...)`.
