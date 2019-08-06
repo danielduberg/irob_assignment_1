@@ -165,7 +165,7 @@ If you want you may also do the intermediate level tutorials and/or the C++ tuto
 
 #### TF2 tutorials
 
-The TF library in ROS is very useful when you building real systems. Therefore we feel it is important that you get to try it out. You should therefore do the [TF2 tutorials](https://wiki.ros.org/tf2/Tutorials) for Python.
+The TF library in ROS is very useful when you are building real systems. Therefore we feel it is important that you get to try it out. You should therefore do the [TF2 tutorials](https://wiki.ros.org/tf2/Tutorials) for Python.
 
 You should do at least:
 
