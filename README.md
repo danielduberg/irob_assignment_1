@@ -224,10 +224,11 @@ Take a look at the TF tree by running the command `rqt`, to start RQT, then in t
 
 ![TF tree](images/frames.png "TF tree")
 
-Take a look at the node graph in RQT `Plugins->Introspection->Node Graph`:
+Take a look at the node graph in RQT `Plugins->Introspection->Node Graph` and uncheck `Leaf topics`:
 
 ![Node graph](images/rosgraph.png "Node graph")
 
+#### Simple approach
 
 Pseudocode of the assignment:
 
@@ -243,6 +244,8 @@ while True:
       publish(setpoint_transformed)
       sleep()
 ```
+
+#### [OPTIONAL] Callback based approach
 
 Minimal example of __Callback Based SimpleActionClient__:
 
@@ -298,6 +301,11 @@ if __name__ == "__main__":
 ```
 
 How can you use the __Callback Based SimpleActionClient__ in order to increase the speed of the exploration? You can implement the assignment with __Callback Based SimpleActionClient__ in __less than 100 lines of Python code__.
+
+What you should see if you have done everything correct:
+
+[![Finished mini-project](http://img.youtube.com/vi/kexHizTs5M4/0.jpg)](http://www.youtube.com/watch?v=kexHizTs5M4)
+
 
 #### The presentation
 
