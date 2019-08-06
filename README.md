@@ -6,7 +6,7 @@ In this course we will be using the Robot Operating System (ROS). ROS is a middl
 
 ### Why do we use ROS?
 
-![ROS community map](/home/dduberg/Pictures/screenshots/ros_community.png "ROS community map")
+![ROS community map](images/ros_community.png "ROS community map")
 
 * Very large user community
 * Standard in many robotics labs around the world, even in some companies
