@@ -376,7 +376,3 @@ Try to cancel all the goals using `goal_client.cancel_all_goals()`.
 ##### I implemented the Callback Based SimpleActionClient, but it is not working :(
 
 Did you actually cancel the request after you got a feedback with high enough gain? When you cancel the request you will get a result `actionlib.TerminalState.PREEMPTED`, so be sure that in the result callback that you only do something if the state is `actionlib.TerminalState.SUCCEEDED`.
-
-##### It is too much to do and it is too difficult :(
-
-It really is not that much to do. The tutorials are just reading and copy-paste. I solved the mini-project with Callback Based SimpleActionClient using 3 if-statements and 1 while-loop. The rest was basically just copy-paste from the tutorials. You find it hard because you are new to ROS, in 1 year you will look back and laugh at yourself.
