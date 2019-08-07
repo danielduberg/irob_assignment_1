@@ -208,25 +208,169 @@ source ~/.bashrc
 
 #### Description
 
-As you all know: Exploration is the ___coolest___ area of robotics. For your first ROS project you should therefore help a robot that is almost ready to perform exploration.
+You will now do a mini-project where you should help a [Turtlebot3](http://emanual.robotis.com/docs/en/platform/turtlebot3/overview/) robot explore an unknown environment.
 
-If you launch the launch file `start.launch` inside `irob_assignment_1/launch`:
+If you launch the launch file `start.launch` inside `irob_assignment_1/launch` like this:
 
 ```bash
 roslaunch irob_assignment_1 start.launch
 ```
 
-You will see this:
+You will see a window called [RViz](https://wiki.ros.org/rviz) open:
 
 ![RViz view](images/rviz.png "RViz view")
+
+In the main view of the RViz window you can see a small Turtlebot3 Burger robot in the middle of the white area. The white area of the map is called _free space_, it is space where the robot knows there is nothing. The large gray area is _unknown space_, it is space that the robot knowns nothing about. It can be either _free space_ or _occupied space_. _Occupied space_ is the cerise colored space. The cyan colored space is called _C-space_, it is space that are a distance from the _occupied space_ such that the robot would collied with the _occupied space_ if it would move into it. Take a look at the image below if you are interested. You can read more about it [here](https://wiki.ros.org/costmap_2d).
+
+![Costmap](https://wiki.ros.org/costmap_2d?action=AttachFile&do=get&target=costmapspec.png "Costmap")
+
+Image taken from: [https://wiki.ros.org/costmap_2d](https://wiki.ros.org/costmap_2d)
+
+Your job will be to make explore as much of the _unknown space_ as possible. Luckily for you, you do not have to do all the work to accomplice this.
+
+If you open up [RQT](https://wiki.ros.org/rqt):
+
+```bash
+rqt
+```
+
+Then in the topbar select `Plugins->Introspection->Node Graph` and uncheck `Leaf topics`, you will see something like this:
+
+![Node graph](images/rosgraph.png "Node graph")
+
+Here you can see all of the nodes that were started when you ran the `roslaunch` command before. There are two nodes of interest for you here. The `/explore` node and the `/collision_avoidance` node.
+
+The `/explore` node is providing an action server called `get_next_goal` with the type `irob_assignment_1/GetNextGoalAction`. If we take a look at the action definition:
+
+```bash
+# Goal definition
+---
+# Result definition
+float64 gain
+nav_msgs/Path path
+---
+# Feedback definition
+float64 gain
+nav_msgs/Path path
+```
+
+We see that in the request it does not require anything. So when you call this action server, you do not have to supply any arguments. The result you will get from the action server is a `gain` value and a `path`. The `gain` value tells you how valuable the `path` is. It is often how much new space you will discover when moving along the path.
+
+In the feedback you can see that you, once again, get `gain` and a `path`. The longer the exploration algorithm is running the better path -- one with higher gain -- it will find. However, it is not always worth the time it takes to find the best path. So since you get a path with an assosiated gain, you might want to stop the exploration once you get a path with a `gain` higher than a certain value. You are not require to do this to pass this assignment, it is optional.
+
+Okay, so lets say you have now called the explore action server and gotten a path. Now you want the robot to move along the path. You also do not want the robot to crash while following the path. Therefore we should now take a look at the `collision avoidance` node.
+
+The collision avoidance node is providing a service called `get_setpoint` of type `irob_assignment_1/GetSetpoint`. If you type:
+
+```bash
+rossrv show irob_assignment_1/GetSetpoint
+```
+
+You will see the request and response messages:
+
+```bash
+# Define the request
+nav_msgs/Path path
+---
+# Define the response
+geometry_msgs/PointStamped setpoint
+nav_msgs/Path new_path
+```
+
+You can see that the service wants a path, which is perfect because that is exactly what you got from the exploration action server. In return you will get a setpoint of type `geometry_msgs/PointStamped` and a new path. You get a new path since the collision avoidance node is removing points along the path which is thinks you have already moved passed. The `setpoint` is where you should move the robot next to follow the path in a safe and efficient way.
+
+If we take a look at the setpoint message:
+
+```bash
+rosmsg show geometry_msgs/PointStamped
+```
+
+We see:
+
+```bash
+std_msgs/Header header
+  uint32 seq
+  time stamp
+  string frame_id
+geometry_msgs/Point point
+  float64 x
+  float64 y
+  float64 z
+```
+
+The `header` tells you in which frame the `point` is in. If you print the frame:
+
+```python
+rospy.loginfo("The frame is: %s" setpoint.header.frame_id)
+```
+
+You will see that the point is specified in the X (where X is the frame you get) frame.
+
+Okay, so now you have the point and you know which frame it is in. How do we make the robot move?
+
+If we take a look at the topics list:
+
+```bash
+rostopic list
+```
+
+You should be able to find a topic called `/cmd_vel`. It sounds interesting, maybe it means "command velociy"? We want more info about the topic so we write:
+
+```bash
+rostopic info /cmd_vel
+```
+
+And it will output something like:
+
+```bash
+Type: geometry_msgs/Twist
+
+Publishers: None
+
+Subscribers: 
+ * /gazebo (http://X:YYYYY/)
+```
+
+Here we see that there is one subscriber to the topic and no publisher. We also see that the message type that is communicated over the topic is called `geometry_msgs/Twist`. We take a look at the message definition:
+
+```bash
+rosmsg show geometry_msgs/Twist
+```
+
+And we get:
+
+```bash
+geometry_msgs/Vector3 linear
+  float64 x
+  float64 y
+  float64 z
+geometry_msgs/Vector3 angular
+  float64 x
+  float64 y
+  float64 z
+```
+
+So the `geometry_msgs/Twist` message consist of a linear and angular velocity. The Turtlebot3 Burger robot is a differential drive robot. Meaning it can only move forward/backward and rotate. To move forward `linear.x` should be positive. To move backwards it would be negative. To rotate you change the value of "angular.z", then the robot will be "yawing", rotating around the z-axis. Changing `linear.y, linear.z, angular.x, and angular.y` has no effect on the robot.
+
+We can also see that the `geometry_msgs/Twist` message does not contain a `header`, therefore the subscriber to the `/cmd_vel` topic has no idea in what frame of reference the incomming velocity command has. Instead the subscriber assumes that the velocity command is in the robots frame.
 
 Take a look at the TF tree by running the command `rqt`, to start RQT, then in the top bar select `Pluings->Visualization->TF Tree`:
 
 ![TF tree](images/frames.png "TF tree")
 
-Take a look at the node graph in RQT `Plugins->Introspection->Node Graph` and uncheck `Leaf topics`:
+The robots frame is often called `base_link` and it is here as well. So this is the frame the subscriber on the `/cmd_vel` topic is expecting the velocity command to be specified in. So if the setpoint you got from the `get_setpoint` service then you have to transform it using TF2 to the correct frame, `base_link`.
 
-![Node graph](images/rosgraph.png "Node graph")
+After you have transformed the setpoint to `base_link` you should now convert the setpoint from a `geometry_msgs/PointStamped` message to a `geometry_msgs/Twist` message and publish it on the `/cmd_vel` topic.
+
+Then after that you should again call the `get_setpoint` with the `new_path` you got from the service the last time you called it, and then you do the same thing to transform and publish the new setpoint. You do this until the `new_path` does not contain any poses:
+
+```python
+0 == len(new_path.poses)
+```
+
+When that happens you should call the explore action server again to get a new path, and do everything over again until the action server returns an empty path and/or the gain is 0, meaning there is nothing new to explore.
+
+You can do the assignment using two different approaches:
 
 #### Simple approach
 
@@ -244,6 +388,8 @@ while True:
       publish(setpoint_transformed)
       sleep()
 ```
+
+You should be able to implement this in around 80-100 lines of Python code.
 
 #### [OPTIONAL] Callback based approach
 
@@ -305,7 +451,6 @@ How can you use the __Callback Based SimpleActionClient__ in order to increase t
 What you should see if you have done everything correct:
 
 [![Finished mini-project](http://img.youtube.com/vi/kexHizTs5M4/0.jpg)](http://www.youtube.com/watch?v=kexHizTs5M4)
-
 
 #### The presentation
 
