@@ -362,6 +362,15 @@ The robots frame is often called `base_link` and it is here as well. So this is 
 
 After you have transformed the setpoint to `base_link` you should now convert the setpoint from a `geometry_msgs/PointStamped` message to a `geometry_msgs/Twist` message and publish it on the `/cmd_vel` topic.
 
+It can be a good idea to limit the linear and angular velocities, otherwise the robot will act strange. These seem to be good values:
+
+```python
+max_linear_velocity = 0.5
+max_angular_velocity = 1.0
+```
+
+But you are free to try other values.
+
 Then after that you should again call the `get_setpoint` with the `new_path` you got from the service the last time you called it, and then you do the same thing to transform and publish the new setpoint. You do this until the `new_path` does not contain any poses:
 
 ```python
@@ -369,6 +378,8 @@ Then after that you should again call the `get_setpoint` with the `new_path` you
 ```
 
 When that happens you should call the explore action server again to get a new path, and do everything over again until the action server returns an empty path and/or the gain is 0, meaning there is nothing new to explore.
+
+It can be a good idea to limit the frequency of publishing to `/cmd_vel` to somewhere between 10 to 20. You can do that using the `rospy.Rate(X)` and then `rate.sleep()` as you did in the tutorials.
 
 You can do the assignment using two different approaches:
 
