@@ -400,7 +400,7 @@ while True:
       sleep()
 ```
 
-You should be able to implement this in around 80-100 lines of Python code.
+You should be able to implement this in around __80-100 lines of Python code__.
 
 #### [OPTIONAL] Callback based approach
 
