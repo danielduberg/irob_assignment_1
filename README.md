@@ -107,7 +107,7 @@ Everything is installed for you in computer labs:
 [Install ROS (ros-melodic-desktop-full)](https://wiki.ros.org/melodic/Installation/Ubuntu), __you should skip this step if you are using the computers in the computer labs mentioned above__. You also need:
 
 ```bash
-sudo apt install ros-melodic-ros-tutorials ros-melodic-turtlebot3 ros-melodic-turtlebot3-simulations ros-melodic-navigation libspatialindex-dev
+sudo apt install ros-melodic-ros-tutorials ros-melodic-turtlebot3 ros-melodic-turtlebot3-simulations ros-melodic-navigation libspatialindex-dev python-pip
 pip install rtree sklearn
 ```
 
