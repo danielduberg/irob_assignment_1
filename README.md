@@ -144,24 +144,26 @@ In order for you to get a practical understanding of ROS you should now do the b
 
 We did 1 above so you can skip that one if you want. Since we are using Python you should therefore do:
 
-* [2. Navigating the ROS Filesystem](https://wiki.ros.org/ROS/Tutorials/NavigatingTheFilesystem)
 * [3. Creating a ROS Package](https://wiki.ros.org/ROS/Tutorials/CreatingPackage)
 * [4. Building a ROS Package](https://wiki.ros.org/ROS/Tutorials/BuildingPackages)
+* [12. Writing a Simple Publisher and Subscriber (Python)](https://wiki.ros.org/ROS/Tutorials/WritingPublisherSubscriber%28python%29)
+* [15. Writing a Simple Service and Client (Python)](https://wiki.ros.org/ROS/Tutorials/WritingServiceClient%28python%29)
+
+If you want you may also do the intermediate level tutorials and/or the C++ tutorials.
+
+[OPTIONAL Tutorials]
+* [2. Navigating the ROS Filesystem](https://wiki.ros.org/ROS/Tutorials/NavigatingTheFilesystem)
 * [5. Understanding ROS Nodes](https://wiki.ros.org/ROS/Tutorials/UnderstandingNodes)
 * [6. Understanding ROS Topics](https://wiki.ros.org/ROS/Tutorials/UnderstandingTopics)
 * [7. Understanding ROS Services and Parameters](https://wiki.ros.org/ROS/Tutorials/UnderstandingServicesParams)
 * [8. Using rqt_console and roslaunch](https://wiki.ros.org/ROS/Tutorials/UsingRqtconsoleRoslaunch)
 * [9. Using rosed to edit files in ROS](https://wiki.ros.org/ROS/Tutorials/UsingRosEd)
 * [10. Creating a ROS msg and srv](https://wiki.ros.org/ROS/Tutorials/CreatingMsgAndSrv)
-* [12. Writing a Simple Publisher and Subscriber (Python)](https://wiki.ros.org/ROS/Tutorials/WritingPublisherSubscriber%28python%29)
 * [13. Examining the Simple Publisher and Subscriber](https://wiki.ros.org/ROS/Tutorials/ExaminingPublisherSubscriber)
-* [15. Writing a Simple Service and Client (Python)](https://wiki.ros.org/ROS/Tutorials/WritingServiceClient%28python%29)
 * [16. Examining the Simple Service and Client](https://wiki.ros.org/ROS/Tutorials/ExaminingServiceClient)
 * [17. Recording and playing back data](https://wiki.ros.org/ROS/Tutorials/Recording%20and%20playing%20back%20data)
 * [18. Getting started with roswtf](https://wiki.ros.org/ROS/Tutorials/Getting%20started%20with%20roswtf)
 * [19. Navigating the ROS wiki](https://wiki.ros.org/ROS/Tutorials/NavigatingTheWiki)
-
-If you want you may also do the intermediate level tutorials and/or the C++ tutorials.
 
 #### TF2 tutorials
 
@@ -173,12 +175,14 @@ You should do at least:
 * [1. Writing a tf2 static broadcaster (Python)](https://wiki.ros.org/tf2/Tutorials/Writing%20a%20tf2%20static%20broadcaster%20%28Python%29)
 * [2. Writing a tf2 broadcaster (Python)](https://wiki.ros.org/tf2/Tutorials/Writing%20a%20tf2%20broadcaster%20%28Python%29)
 * [3. Writing a tf2 listener (Python)](https://wiki.ros.org/tf2/Tutorials/Writing%20a%20tf2%20listener%20%28Python%29)
+
+You can of course do the other tutorials as well.
+
+[OPTIONAL]
 * [4. Adding a frame (Python)](https://wiki.ros.org/tf2/Tutorials/Adding%20a%20frame%20%28Python%29)
 * [5. Learning about tf2 and time (Python)](https://wiki.ros.org/tf2/Tutorials/tf2%20and%20time%20%28Python%29)
 * [6. Time travel with tf2 (Python)](https://wiki.ros.org/tf2/Tutorials/Time%20travel%20with%20tf2%20%28Python%29)
 * [1. Quaternion Basics](https://wiki.ros.org/tf2/Tutorials/Quaternions)
-
-You can of course do the other tutorials as well.
 
 #### Actionlib tutorials
 
