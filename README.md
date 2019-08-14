@@ -202,10 +202,11 @@ You should do at least these actionlib tutorials:
 ```bash
 cd ~/catkin_ws/
 wstool init src
-cd src
-wstool set irob_assignment_1 --git https://github.com/danielduberg/irob_assignment_1.git -v master
-wstool set hector_slam --git https://github.com/tu-darmstadt-ros-pkg/hector_slam.git -v melodic-devel
+cd ~/catkin_ws/src
+wstool set -y irob_assignment_1 --git https://github.com/danielduberg/irob_assignment_1.git -v master
+wstool set -y hector_slam --git https://github.com/tu-darmstadt-ros-pkg/hector_slam.git -v melodic-devel
 wstool update
+cd ~/catkin_ws
 catkin_make -DCMAKE_BUILD_TYPE=RelWithDebInfo
 source ~/.bashrc
 ```
