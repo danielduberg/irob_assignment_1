@@ -93,7 +93,7 @@ Now we will start with the practical part of the assignment.
 * ROS __Melodic__
 * Python
   * Version 2.7
-  * Default with Ubuntu 18.04
+  * Default with ROS Melodic
 
 If you are interested you can read more [here](http://www.ros.org/reps/rep-0003.html).
 
