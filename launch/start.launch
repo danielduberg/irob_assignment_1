@@ -6,6 +6,10 @@
   <arg name="z_pos" default="0.0"/>
 	<arg name="gui" default="false"/>
   <arg name="multi_robot_name" default=""/>
+	
+  <!-- We need to set this environment variable because they messed up in urdfdom
+       See this: https://github.com/ros-visualization/rviz/issues/1249 -->
+  <env name="LC_NUMERIC" value="en_US.UTF-8"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find irob_assignment_1)/worlds/office.world"/>
@@ -20,8 +24,8 @@
 
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model turtlebot3 -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
 
-	<!-- SLAM -->
-	<arg name="slam_methods" default="hector" doc="slam type [gmapping, cartographer, hector, karto, frontier_exploration]"/>
+  <!-- SLAM -->
+  <arg name="slam_methods" default="hector" doc="slam type [gmapping, cartographer, hector, karto, frontier_exploration]"/>
   <arg name="configuration_basename" default="turtlebot3_lds_2d.lua"/>
   <arg name="open_rviz" default="true"/>
 
