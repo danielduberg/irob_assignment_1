@@ -4,58 +4,31 @@
   <arg name="x_pos" default="0.0"/>
   <arg name="y_pos" default="0.0"/>
   <arg name="z_pos" default="0.0"/>
-	<arg name="gui" default="false"/>
-  <arg name="multi_robot_name" default=""/>
-	
+  <arg name="gui" default="false"/>
+
   <!-- We need to set this environment variable because they messed up in urdfdom
        See this: https://github.com/ros-visualization/rviz/issues/1249 -->
   <env name="LC_NUMERIC" value="en_US.UTF-8"/>
 
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find irob_assignment_1)/worlds/office.world"/>
-    <arg name="paused" value="false"/>
-    <arg name="use_sim_time" value="true"/>
-    <arg name="gui" value="$(arg gui)"/>
-    <arg name="headless" value="false"/>
-    <arg name="debug" value="false"/>
-  </include>
+  <!-- Set robot pose -->
+  <node pkg="rosservice" type="rosservice" name="set_robot_pose" output="screen" args="call /gazebo/set_model_state '{model_state: { model_name: turtlebot3, pose: { position: { x: $(arg x_pos), y: $(arg y_pos), z: $(arg z_pos) }, orientation: {x: 0, y: 0, z: 0, w: 1 } }, twist: { linear: {x: 0 , y: 0, z: 0 } , angular: { x: 0, y: 0, z: 0 } } , reference_frame: map } }'" />
 
-  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find irob_assignment_1)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+  <!-- Stop the robot -->
+  <node pkg="rostopic" type="rostopic" name="stop_robot_pub" args="pub --once /cmd_vel geometry_msgs/Twist '{linear: { x: 0.0, y: 0.0, z: 0.0 }, angular: { x: 0.0, y: 0.0, z: 0.0 } }'" />
 
-  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model turtlebot3 -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
-
-  <!-- SLAM -->
-  <arg name="slam_methods" default="hector" doc="slam type [gmapping, cartographer, hector, karto, frontier_exploration]"/>
-  <arg name="configuration_basename" default="turtlebot3_lds_2d.lua"/>
-  <arg name="open_rviz" default="true"/>
-
-  <!-- TurtleBot3 -->
-  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
-    <param name="publish_frequency" type="double" value="50.0" />
-    <param name="tf_prefix" value="$(arg multi_robot_name)"/>
-  </node>
-
-  <!-- SLAM: Gmapping, Cartographer, Hector, Karto, Frontier_exploration, RTAB-Map -->
-  <include file="$(find irob_assignment_1)/launch/slam.launch">
-    <arg name="model" value="$(arg model)"/>
-    <arg name="configuration_basename" value="$(arg configuration_basename)"/>
-  </include>
-
-  <!-- rviz -->
-  <group if="$(arg open_rviz)"> 
-    <node pkg="rviz" type="rviz" name="rviz" required="true"
-          args="-d $(find irob_assignment_1)/rviz/view.rviz -s $(find irob_assignment_1)/rviz/splash_screen.png"/>
-  </group>
-
-  <!-- Run the costmap node -->
-  <node name="costmap_node" pkg="costmap_2d" type="costmap_2d_node" >
-    <rosparam file="$(find irob_assignment_1)/config/costmap.yaml" command="load" ns="costmap" />
-    <remap from="base_scan" to="scan"/>
-  </node>
+  <!-- Reset SLAM -->
+  <node pkg="rostopic" type="rostopic" name="reset_slam_pub" args="pub --once /syscommand std_msgs/String '{data: reset }'" />
 
   <!-- Exploration -->
   <node pkg="irob_assignment_1" type="explorer.py" name="explorer" output="screen" />
 
   <!-- Collision avoidance -->
   <node pkg="irob_assignment_1" type="collision_avoidance.py" name="collision_avoidance" output="screen" />
+
+  <!-- Costmap-->
+  <node name="costmap_node" pkg="costmap_2d" type="costmap_2d_node">
+    <rosparam file="$(find irob_assignment_1)/config/costmap.yaml" command="load" ns="costmap" />
+    <remap from="base_scan" to="scan"/>
+  </node>
+
 </launch>

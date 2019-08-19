@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="gui" default="false"/>
+  <arg name="verbose" default="true"/>
+  <arg name="x_pos" default="0.0"/>
+  <arg name="y_pos" default="0.0"/>
+  <arg name="z_pos" default="0.0"/>
+  <arg name="multi_robot_name" default=""/>
+  <arg name="configuration_basename" default="turtlebot3_lds_2d.lua"/>
+
+  <!-- We need to set this environment variable because they messed up in urdfdom
+       See this: https://github.com/ros-visualization/rviz/issues/1249 -->
+  <env name="LC_NUMERIC" value="en_US.UTF-8"/>
+
+  <!-- Gazebo (the simulator) -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find irob_assignment_1)/worlds/office.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+    <arg name="verbose" value="$(arg verbose)"/>
+  </include>
+
+  <!-- Set the robot description (such that transforms are published and so the robot can be seen in RViz)-->
+  <param name="robot_description" command="$(find xacro)/xacro $(find irob_assignment_1)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+
+  <!-- Spawn robot -->
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model turtlebot3 -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
+
+  <!-- TurtleBot3 -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="50.0" />
+    <param name="tf_prefix" value="$(arg multi_robot_name)"/>
+  </node>
+
+  <!-- rviz -->
+  <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find irob_assignment_1)/rviz/view.rviz -s $(find irob_assignment_1)/rviz/splash_screen.png"/>
+
+  <!-- SLAM -->
+  <include file="$(find irob_assignment_1)/launch/slam.launch">
+    <arg name="model" value="$(arg model)"/>
+    <arg name="configuration_basename" value="$(arg configuration_basename)"/>
+  </include>
+</launch>
