@@ -51,4 +51,5 @@ qtcreator-*
 CATKIN_IGNORE
 
 # Controller
-scripts/controller.py
+scripts/controller_solution.py
+scripts/controller_feedback_solution.py
