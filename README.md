@@ -420,26 +420,31 @@ import irob_assignment_1.msg
 goal_client = None
 
 def goal_active():
-    pass
+    rospy.loginfo("I got activated")
 
 
 def goal_feedback(feedback):
-    pass
+    rospy.loginfo("I got feedback")
+
+    # TODO: Do your stuff
 
 
 def goal_result(state, result):
     if actionlib.TerminalState.SUCCEEDED == state:
-        pass
+        rospy.loginfo("Action returned succeeded")
+
+        # TODO: Do your stuff
+        
     elif actionlib.TerminalState.RECALLED == state:
-        pass
+        rospy.loginfo("Action returned recalled")
     elif actionlib.TerminalState.REJECTED == state:
-        pass
+        rospy.loginfo("Action returned rejected")
     elif actionlib.TerminalState.PREEMPTED = state:
-        pass
+        rospy.loginfo("Action returned preempted")
     elif actionlib.TerminalState.ABORTED = state:
-        pass
+        rospy.loginfo("Action returned aborted")
     elif actionlib.TerminalState.LOST = state:
-        pass
+        rospy.loginfo("Action returned lost")
 
 
 def get_path():
