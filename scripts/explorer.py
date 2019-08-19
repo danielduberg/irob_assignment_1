@@ -90,6 +90,7 @@ def get_next_goal(goal):
             # Publish this new better path as feedback
             feedback.gain = gain
             rospy.loginfo("Explorer: Current max gain %s", round(feedback.gain, 2))
+            rospy.loginfo("Explorer: %s nodes of %s, %s remaining", i, max_nodes, max_nodes - i)
             feedback.path = node.get_path(grid_map.header.frame_id)
             feedback.path.header.frame_id = grid_map.header.frame_id
             feedback.path.header.stamp = rospy.Time.now()
