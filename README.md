@@ -379,7 +379,7 @@ But you are free to try other values.
 Then after that you should again call the `get_setpoint` with the `new_path` you got from the service the last time you called it, and then you do the same thing to transform and publish the new setpoint. You do this until the `new_path` does not contain any poses:
 
 ```python
-0 == len(new_path.poses)
+while new_path.poses:
 ```
 
 When that happens you should call the explore action server again to get a new path, and do everything over again until the action server returns an empty path and/or the gain is 0, meaning there is nothing new to explore.
@@ -434,7 +434,7 @@ def goal_result(state, result):
         rospy.loginfo("Action returned succeeded")
 
         # TODO: Do your stuff
-        
+
     elif actionlib.TerminalState.RECALLED == state:
         rospy.loginfo("Action returned recalled")
     elif actionlib.TerminalState.REJECTED == state:
@@ -489,7 +489,7 @@ I did it with `tf_buffer.lookup_transform(...)` and `tf2_geometry_msgs.do_transf
 
 Did you set a maximum linear and angular velocity? 0.5 and 1.0, respectively, should work.
 
-##### How do I get the angular velocity?
+##### How do I get the angle to the setpoint?
 
 Math. Use: `math.atan2(y, x)`.
 
