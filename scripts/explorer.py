@@ -19,7 +19,7 @@ listener = None
 grid_map = None
 
 robot_frame_id = ""
-max_nodes = 1000
+max_nodes = 500
 extension_range = 1.0
 radius = 0.105
 
@@ -176,9 +176,9 @@ if __name__ == "__main__":
 
     # Read parameters
     robot_frame_id = rospy.get_param("~robot_frame_id", "base_link")
-    max_nodes = rospy.get_param("~max_nodes", 1000)
-    extension_range = rospy.get_param("~extension_range", 1)
-    radius = rospy.get_param("~radius", 0.105)
+    max_nodes = rospy.get_param("~max_nodes", max_nodes)
+    extension_range = rospy.get_param("~extension_range", extension_range)
+    radius = rospy.get_param("~radius", radius)
     fov = rospy.get_param("~fov", 2 * pi)
     range_min = rospy.get_param("~range_min", 0.12)
     range_max = rospy.get_param("~range_max", 10)  # 3.5
