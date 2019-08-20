@@ -19,7 +19,7 @@ listener = None
 grid_map = None
 
 robot_frame_id = ""
-max_nodes = 500
+max_nodes = 1000
 extension_range = 1.0
 radius = 0.105
 
