@@ -53,3 +53,6 @@ CATKIN_IGNORE
 # Controller
 scripts/controller_solution.py
 scripts/controller_feedback_solution.py
+
+# Presentation questions
+presentation_questions.md

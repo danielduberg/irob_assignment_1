@@ -16,3 +16,5 @@ sudo apt install ros-melodic-ros-tutorials ros-melodic-turtlebot3 ros-melodic-tu
 
 sudo apt install ros-melodic-rqt ros-melodic-rqt-common-plugins ros-melodic-turtlesim
 sudo apt install ros-melodic-turtle-tf2 ros-melodic-tf2-tools ros-melodic-tf
+
+pip install rtree sklearn
