@@ -677,6 +677,27 @@ Try to cancel all the goals using `goal_client.cancel_all_goals()`.
 
 Did you actually cancel the request after you got a feedback with high enough gain? When you cancel the request you will get a result `actionlib.TerminalState.PREEMPTED`, so be sure that in the result callback that you only do something if the state is `actionlib.TerminalState.SUCCEEDED`.
 
+##### I get an error when launching the simulation
+
+If you get an error like this when starting the simulation:
+
+```bash
+[ERROR] [1566203746.351834242, 923.389000000]: Transform failed during publishing of map_odom transform: Lookup would require extrapolation into the past.  Requested time 922.885000000 but the earliest data is at time 922.951000000, when looking up transform from frame [base_footprint] to frame [odom]
+```
+
+Do not worry about it. It is fine. It is because the SLAM system is trying to use a transform that does not exist yet.
+
+##### I get an other error when launching the simulation
+
+If you get an error like this when starting the simulation:
+
+```bash
+[gazebo-1] process has died [pid 6639, exit code 255, cmd /opt/ros/melodic/lib/gazebo_ros/gzserver -e ode /home/dduberg/catkin_ws/src/irob_assignment_1/worlds/office.world __name:=gazebo __log:=/home/dduberg/.ros/log/18af60ee-c01f-11e9-98f6-b06ebf6030aa/gazebo-1.log].
+log file: /home/dduberg/.ros/log/18af60ee-c01f-11e9-98f6-b06ebf6030aa/gazebo-1*.log
+```
+
+It means that Gazebo crashed and you have to restart the simulation. Sadly, this happens sometime.
+
 ##### It takes a long time for RViz and/or Gazebo to load/start
 
 Run these commands:
