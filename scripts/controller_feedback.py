@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
     # Init publisher
 
-    # Init simple action server
+    # Init simple action client
 
     # Init service client
 
